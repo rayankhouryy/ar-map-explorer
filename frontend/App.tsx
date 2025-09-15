@@ -4,6 +4,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
 import { Provider as PaperProvider } from 'react-native-paper';
 import { StatusBar } from 'expo-status-bar';
+import { View, ActivityIndicator } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
 // Screens
@@ -18,7 +19,7 @@ import ArtifactDetailScreen from './src/screens/ArtifactDetailScreen';
 import CameraScreen from './src/screens/CameraScreen';
 
 // Context
-import { AuthProvider } from './src/contexts/AuthContext';
+import { AuthProvider, useAuth } from './src/contexts/AuthContext';
 import { LocationProvider } from './src/contexts/LocationContext';
 
 // Types
@@ -27,7 +28,17 @@ import { RootStackParamList, TabParamList } from './src/types/navigation';
 const Tab = createBottomTabNavigator<TabParamList>();
 const Stack = createStackNavigator<RootStackParamList>();
 
-function TabNavigator() {
+// Loading Screen Component
+function LoadingScreen() {
+  return (
+    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+      <ActivityIndicator size="large" color="#6366f1" />
+    </View>
+  );
+}
+
+// Tab Navigator for Authenticated Users
+function AuthenticatedTabNavigator() {
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
@@ -61,30 +72,21 @@ function TabNavigator() {
   );
 }
 
-function AppNavigator() {
+// Stack Navigator for Authenticated Users (includes modals)
+function AuthenticatedStackNavigator() {
   return (
-    <Stack.Navigator initialRouteName="Main">
+    <Stack.Navigator>
       <Stack.Screen 
         name="Main" 
-        component={TabNavigator} 
+        component={AuthenticatedTabNavigator} 
         options={{ headerShown: false }}
-      />
-      <Stack.Screen 
-        name="Login" 
-        component={LoginScreen}
-        options={{ title: 'Sign In' }}
-      />
-      <Stack.Screen 
-        name="Register" 
-        component={RegisterScreen}
-        options={{ title: 'Create Account' }}
       />
       <Stack.Screen 
         name="Camera" 
         component={CameraScreen}
         options={{ 
           title: 'Create AR Content',
-          headerShown: false, // Full screen camera
+          headerShown: false,
         }}
       />
       <Stack.Screen 
@@ -97,12 +99,49 @@ function AppNavigator() {
         component={ARViewerScreen}
         options={{ 
           title: 'AR View',
-          headerShown: false, // Full screen AR
+          headerShown: false,
           gestureEnabled: false,
         }}
       />
     </Stack.Navigator>
   );
+}
+
+// Stack Navigator for Unauthenticated Users (Auth Flow)
+function UnauthenticatedStackNavigator() {
+  return (
+    <Stack.Navigator initialRouteName="Login">
+      <Stack.Screen 
+        name="Login" 
+        component={LoginScreen}
+        options={{ 
+          title: 'Welcome to AR Map Explorer',
+          headerShown: false, // Custom header in LoginScreen
+        }}
+      />
+      <Stack.Screen 
+        name="Register" 
+        component={RegisterScreen}
+        options={{ 
+          title: 'Join AR Map Explorer',
+          headerShown: false, // Custom header in RegisterScreen
+        }}
+      />
+    </Stack.Navigator>
+  );
+}
+
+// Main App Navigator with Authentication Logic
+function AppNavigator() {
+  const { isAuthenticated, isLoading } = useAuth();
+
+  // Show loading screen while checking authentication
+  if (isLoading) {
+    return <LoadingScreen />;
+  }
+
+  // Show appropriate navigator based on authentication status
+  return isAuthenticated ? <AuthenticatedStackNavigator /> : <UnauthenticatedStackNavigator />;
 }
 
 export default function App() {

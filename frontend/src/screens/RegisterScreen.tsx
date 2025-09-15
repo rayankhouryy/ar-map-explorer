@@ -64,7 +64,7 @@ export default function RegisterScreen({ navigation }: Props) {
     setLoading(true);
     try {
       await register(email.trim(), password, fullName.trim() || undefined, role);
-      navigation.navigate('Main');
+      // Navigation will happen automatically via AppNavigator
     } catch (error: any) {
       Alert.alert('Registration Failed', error.message || 'An error occurred');
     } finally {

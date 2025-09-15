@@ -1,4 +1,4 @@
-n I# Contributing to AR Map Explorer
+# Contributing to AR Map Explorer
 
 We love your input! We want to make contributing to AR Map Explorer as easy and transparent as possible, whether it's:
 

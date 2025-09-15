@@ -4,7 +4,7 @@ from sqlalchemy.orm import Session
 import json
 
 from app.core.deps import get_db, get_current_active_user, get_current_creator
-from app.models.artifact import Artifact, ArtifactType, ArtifactStatus
+from app.models.artifact import Artifact, ArtifactType, ArtifactStatus, AssetType
 from app.models.user import User
 from app.schemas.artifact import (
     Artifact as ArtifactSchema,
@@ -34,12 +34,12 @@ def create_artifact(
     Create a new artifact with file upload.
     """
     # Validate file
-    validation_result = validate_file(file, "image")
+    validation_result = validate_file(file, AssetType.IMAGE)
     if not validation_result["valid"]:
         raise HTTPException(status_code=400, detail=validation_result["error"])
     
     # Handle file upload
-    upload_result = handle_file_upload(file, "image")
+    upload_result = handle_file_upload(file, AssetType.IMAGE)
     if not upload_result["success"]:
         raise HTTPException(status_code=500, detail=upload_result["error"])
     

@@ -7,8 +7,13 @@ import {
   Platform,
   ScrollView,
   Alert,
+  Dimensions,
+  SafeAreaView,
 } from 'react-native';
 import { TextInput, Button, Card } from 'react-native-paper';
+
+const { width } = Dimensions.get('window');
+const scale = (size: number) => (width / 375) * size;
 import { useAuth } from '../contexts/AuthContext';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '../types/navigation';
@@ -36,7 +41,7 @@ export default function LoginScreen({ navigation }: Props) {
     setLoading(true);
     try {
       await login(email.trim(), password);
-      navigation.navigate('Main');
+      // Navigation will happen automatically via AppNavigator
     } catch (error: any) {
       Alert.alert('Login Failed', error.message || 'An error occurred');
     } finally {
@@ -49,14 +54,20 @@ export default function LoginScreen({ navigation }: Props) {
   };
 
   return (
-    <KeyboardAvoidingView
-      style={styles.container}
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-    >
-      <ScrollView contentContainerStyle={styles.scrollContainer}>
-        <View style={styles.content}>
-          <Text style={styles.title}>Welcome Back</Text>
-          <Text style={styles.subtitle}>Sign in to explore AR artifacts</Text>
+    <SafeAreaView style={styles.container}>
+      <KeyboardAvoidingView
+        style={styles.keyboardContainer}
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      >
+        <ScrollView contentContainerStyle={styles.scrollContainer}>
+          <View style={styles.content}>
+            <View style={styles.header}>
+              <Text style={styles.appTitle}>🌍 AR Map Explorer</Text>
+              <Text style={styles.welcomeText}>Welcome Back!</Text>
+              <Text style={styles.subtitle}>
+                Sign in to discover and create amazing AR experiences
+              </Text>
+            </View>
 
           <Card style={styles.card}>
             <Card.Content>
@@ -108,9 +119,10 @@ export default function LoginScreen({ navigation }: Props) {
               </View>
             </Card.Content>
           </Card>
-        </View>
-      </ScrollView>
-    </KeyboardAvoidingView>
+          </View>
+        </ScrollView>
+      </KeyboardAvoidingView>
+    </SafeAreaView>
   );
 }
 
@@ -119,26 +131,43 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#f5f5f5',
   },
+  keyboardContainer: {
+    flex: 1,
+  },
   scrollContainer: {
     flexGrow: 1,
+    justifyContent: 'center',
   },
   content: {
     flex: 1,
     justifyContent: 'center',
-    padding: 20,
+    paddingHorizontal: scale(20),
+    paddingVertical: scale(40),
   },
-  title: {
-    fontSize: 28,
+  header: {
+    alignItems: 'center',
+    marginBottom: scale(32),
+  },
+  appTitle: {
+    fontSize: scale(32),
     fontWeight: 'bold',
+    color: '#6366f1',
+    marginBottom: scale(8),
     textAlign: 'center',
-    marginBottom: 8,
+  },
+  welcomeText: {
+    fontSize: scale(24),
+    fontWeight: 'bold',
     color: '#333',
+    marginBottom: scale(8),
+    textAlign: 'center',
   },
   subtitle: {
-    fontSize: 16,
-    textAlign: 'center',
-    marginBottom: 32,
+    fontSize: scale(16),
     color: '#666',
+    textAlign: 'center',
+    lineHeight: scale(22),
+    paddingHorizontal: scale(10),
   },
   card: {
     elevation: 4,

@@ -207,6 +207,7 @@ def handle_file_upload(file: UploadFile, asset_type: AssetType) -> Dict[str, Any
     
     # Return file information
     return {
+        "success": True,
         "asset_url": f"/uploads/{asset_type.value}/{filename}",
         "thumbnail_url": thumbnail_url,
         "file_size_bytes": file_size_bytes,

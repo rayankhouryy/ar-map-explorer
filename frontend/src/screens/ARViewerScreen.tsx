@@ -171,10 +171,26 @@ export default function ARViewerScreen() {
         {/* AR Content Area */}
         {isPlaced && (
           <View style={styles.arContent}>
-            {/* This is where the actual 3D model would be rendered */}
-            <View style={styles.modelPlaceholder}>
-              <Text style={styles.modelText}>AR Model Here</Text>
-            </View>
+            {/* Enhanced 3D model display for Space Needle */}
+            {artifact.asset_type === 'model_3d' ? (
+              <View style={styles.modelContainer}>
+                <View style={styles.spaceNeedleModel}>
+                  <Text style={styles.modelTitle}>🗼</Text>
+                  <Text style={styles.modelSubtitle}>{artifact.title}</Text>
+                  <View style={styles.modelStats}>
+                    <Text style={styles.statText}>📏 605 feet tall</Text>
+                    <Text style={styles.statText}>🏗️ Built in 1962</Text>
+                    <Text style={styles.statText}>👁️ 360° views</Text>
+                  </View>
+                </View>
+                <View style={styles.modelPulse} />
+              </View>
+            ) : (
+              <View style={styles.modelPlaceholder}>
+                <Text style={styles.modelText}>📱 AR Content</Text>
+                <Text style={styles.modelSubtext}>{artifact.title}</Text>
+              </View>
+            )}
           </View>
         )}
 
@@ -333,6 +349,48 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  modelContainer: {
+    position: 'relative',
+    alignItems: 'center',
+  },
+  spaceNeedleModel: {
+    backgroundColor: 'rgba(0, 0, 0, 0.8)',
+    borderRadius: 20,
+    padding: 20,
+    alignItems: 'center',
+    minWidth: 250,
+    borderWidth: 2,
+    borderColor: '#6366f1',
+  },
+  modelTitle: {
+    fontSize: 48,
+    marginBottom: 8,
+  },
+  modelSubtitle: {
+    color: 'white',
+    fontSize: 18,
+    fontWeight: 'bold',
+    textAlign: 'center',
+    marginBottom: 16,
+  },
+  modelStats: {
+    alignItems: 'center',
+    gap: 6,
+  },
+  statText: {
+    color: '#ccc',
+    fontSize: 14,
+    textAlign: 'center',
+  },
+  modelPulse: {
+    position: 'absolute',
+    width: 300,
+    height: 300,
+    borderRadius: 150,
+    borderWidth: 2,
+    borderColor: 'rgba(99, 102, 241, 0.3)',
+    top: -25,
+  },
   modelPlaceholder: {
     width: 200,
     height: 200,
@@ -345,8 +403,14 @@ const styles = StyleSheet.create({
   },
   modelText: {
     color: 'white',
-    fontSize: 16,
+    fontSize: 24,
     fontWeight: 'bold',
+    marginBottom: 8,
+  },
+  modelSubtext: {
+    color: 'white',
+    fontSize: 14,
+    textAlign: 'center',
   },
   bottomControls: {
     padding: 20,

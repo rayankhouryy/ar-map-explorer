@@ -488,33 +488,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - **Issues**: [GitHub Issues](https://github.com/your-username/ar-map-explorer/issues)
 - **Discussions**: [GitHub Discussions](https://github.com/your-username/ar-map-explorer/discussions)
 
-## 🎯 Roadmap
-
-### **Phase 1 (Current)**
-- ✅ Basic AR content creation and discovery
-- ✅ GPS-based anchoring
-- ✅ User authentication and roles
-- ✅ Mobile app with camera integration
-
-### **Phase 2 (Next)**
-- 🔄 3D model support (GLB/GLTF)
-- 🔄 Advanced AR features (occlusion, lighting)
-- 🔄 Social features (comments, ratings)
-- 🔄 Content moderation tools
-
-### **Phase 3 (Future)**
-- 📋 Web AR viewer
-- 📋 Advanced analytics dashboard
-- 📋 Multi-tenant architecture
-- 📋 Enterprise features
-
-## 🎉 Acknowledgments
-
-- **FastAPI** for the amazing Python web framework
-- **Expo** for simplifying React Native development
-- **React Navigation** for seamless mobile navigation
-- **PostgreSQL** for robust database capabilities
-
 ---
 
 **Happy AR Creating! 🚀✨**

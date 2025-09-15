@@ -37,8 +37,11 @@ echo "🔄 Running database migrations..."
 alembic upgrade head
 
 # Create uploads directory
-mkdir -p uploads/{image,video,model,pdf}/
-mkdir -p uploads/thumbnails/
+mkdir -p uploads/{images,models,thumbnails,previews,image,video,model,pdf}/
+
+# Seed sample data (Space Needle and Seattle landmarks)
+echo "🗼 Seeding sample data..."
+python scripts/seed_sample_data.py
 
 echo "✅ Backend starting on http://localhost:8001"
 echo "📖 API Documentation: http://localhost:8001/docs"

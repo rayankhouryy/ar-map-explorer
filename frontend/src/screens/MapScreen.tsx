@@ -119,17 +119,6 @@ export default function MapScreen() {
     }
   };
 
-  const centerOnSeattle = () => {
-    const seattleRegion = {
-      latitude: 47.6205, // Space Needle coordinates
-      longitude: -122.3493,
-      latitudeDelta: 0.02,
-      longitudeDelta: 0.02 * ASPECT_RATIO,
-    };
-    setRegion(seattleRegion);
-    mapRef.current?.animateToRegion(seattleRegion, 1000);
-    loadNearbyArtifacts(47.6205, -122.3493, 5000);
-  };
 
   const getMarkerColor = (artifact: ArtifactWithDistance) => {
     if (!artifact.is_in_range) return '#9CA3AF'; // gray for out of range
@@ -183,21 +172,12 @@ export default function MapScreen() {
         ))}
       </MapView>
 
-      {/* Location FABs */}
+      {/* Location FAB */}
       <FAB
         icon="crosshairs-gps"
         style={styles.locationFab}
         onPress={centerOnUser}
         size="small"
-      />
-      
-      {/* Seattle Demo FAB */}
-      <FAB
-        icon="city"
-        style={styles.seattleFab}
-        onPress={centerOnSeattle}
-        size="small"
-        label="Seattle Demo"
       />
 
       {/* Bottom Sheet */}
@@ -263,11 +243,5 @@ const styles = StyleSheet.create({
     bottom: 100,
     right: 16,
     backgroundColor: '#fff',
-  },
-  seattleFab: {
-    position: 'absolute',
-    bottom: 170,
-    right: 16,
-    backgroundColor: '#10B981',
   },
 });

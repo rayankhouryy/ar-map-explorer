@@ -8,7 +8,7 @@ import {
   StatusBar,
 } from 'react-native';
 import { IconButton, Button, Portal, Modal } from 'react-native-paper';
-import { Camera, CameraType } from 'expo-camera';
+import { Camera } from 'expo-camera';
 import { RouteProp, useRoute, useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '../types/navigation';
@@ -124,7 +124,7 @@ export default function ARViewerScreen() {
       <StatusBar barStyle="light-content" />
       
       {/* Camera View */}
-      <Camera style={styles.camera} type={CameraType.back}>
+      <Camera style={styles.camera} facing="back">
         {/* Top Bar */}
         <View style={styles.topBar}>
           <IconButton

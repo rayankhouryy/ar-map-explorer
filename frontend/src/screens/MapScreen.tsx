@@ -54,17 +54,17 @@ export default function MapScreen() {
     }, [token, hasLocationPermission])
   );
 
-  // Update region when location is available
+  // Auto-center on Seattle for Space Needle demo experience
+  useEffect(() => {
+    // Always start with Seattle for the AR demo experience
+    centerOnSeattle();
+  }, []);
+
+  // Update region when user location is available (for location button)
   useEffect(() => {
     if (location) {
-      const newRegion = {
-        latitude: location.coords.latitude,
-        longitude: location.coords.longitude,
-        latitudeDelta: LATITUDE_DELTA,
-        longitudeDelta: LONGITUDE_DELTA,
-      };
-      setRegion(newRegion);
-      loadNearbyArtifacts(location.coords.latitude, location.coords.longitude);
+      // Don't auto-center on user location anymore, keep Seattle demo
+      // User can manually center using the location button
     }
   }, [location]);
 
@@ -117,6 +117,20 @@ export default function MapScreen() {
     } else if (!hasLocationPermission) {
       requestLocation();
     }
+  };
+
+  const centerOnSeattle = () => {
+    const seattleRegion = {
+      latitude: 47.6205, // Space Needle coordinates
+      longitude: -122.3493,
+      latitudeDelta: 0.02,
+      longitudeDelta: 0.02 * ASPECT_RATIO,
+    };
+    setRegion(seattleRegion);
+    if (mapRef.current) {
+      mapRef.current.animateToRegion(seattleRegion, 1000);
+    }
+    loadNearbyArtifacts(47.6205, -122.3493, 5000);
   };
 
 

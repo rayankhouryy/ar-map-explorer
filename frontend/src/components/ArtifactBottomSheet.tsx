@@ -14,6 +14,7 @@ import { ArtifactWithDistance } from '../types';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '../types/navigation';
+import { useLocation } from '../contexts/LocationContext';
 
 const { height } = Dimensions.get('window');
 
@@ -36,6 +37,13 @@ export default function ArtifactBottomSheet({
   userLocation 
 }: Props) {
   const navigation = useNavigation<NavigationProp>();
+  const { location, requestLocation } = useLocation();
+  
+  // Use location from context as fallback if userLocation prop is not provided
+  const effectiveUserLocation = userLocation || (location ? {
+    latitude: location.coords.latitude,
+    longitude: location.coords.longitude,
+  } : null);
 
   const formatDistance = (meters?: number) => {
     if (!meters) return 'Distance unknown';
@@ -63,22 +71,73 @@ export default function ArtifactBottomSheet({
 
   const canViewAR = artifact.is_in_range && !artifact.is_locked;
 
-  const handleViewAR = () => {
-    if (!userLocation) {
-      Alert.alert('Error', 'Location not available');
-      return;
+  const handleViewAR = async () => {
+    console.log('🚀 handleViewAR called');
+    console.log('📍 effectiveUserLocation:', effectiveUserLocation);
+    console.log('🎯 canViewAR:', canViewAR);
+    console.log('🗼 artifact:', artifact.title);
+    
+    if (!effectiveUserLocation) {
+      // Try to request location first
+      console.log('📍 No location available, requesting...');
+      try {
+        await requestLocation();
+        // Check again after requesting
+        const newLocation = location ? {
+          latitude: location.coords.latitude,
+          longitude: location.coords.longitude,
+        } : null;
+        
+        if (!newLocation) {
+          Alert.alert(
+            'Location Required', 
+            'Please enable location services to use AR features. You can also use the demo from Seattle coordinates.',
+            [
+              { text: 'Cancel', style: 'cancel' },
+              { 
+                text: 'Use Seattle Demo', 
+                onPress: () => {
+                  // Use Space Needle coordinates as fallback
+                  const seattleLocation = {
+                    latitude: 47.6205,
+                    longitude: -122.3493,
+                  };
+                  navigateToAR(seattleLocation);
+                }
+              }
+            ]
+          );
+          return;
+        }
+        navigateToAR(newLocation);
+      } catch (error) {
+        console.error('❌ Location request failed:', error);
+        Alert.alert('Error', 'Could not get location. Please check your location settings.');
+        return;
+      }
+    } else {
+      navigateToAR(effectiveUserLocation);
     }
+  };
 
+  const navigateToAR = (userLoc: { latitude: number; longitude: number }) => {
     if (!canViewAR) {
       Alert.alert('Not Available', getStatusText());
       return;
     }
 
-    onDismiss();
-    navigation.navigate('ARViewer', {
-      artifact,
-      userLocation,
-    });
+    try {
+      console.log('🎪 Navigating to ARViewer...');
+      onDismiss();
+      navigation.navigate('ARViewer', {
+        artifact,
+        userLocation: userLoc,
+      });
+      console.log('✅ Navigation called successfully');
+    } catch (error) {
+      console.error('❌ Navigation error:', error);
+      Alert.alert('Error', 'Failed to open AR view');
+    }
   };
 
   const handleViewDetails = () => {

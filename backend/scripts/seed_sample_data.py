@@ -106,10 +106,10 @@ Built for the 1962 World's Fair, the Space Needle stands 605 feet tall and is on
             anchor_mode=AnchorMode.GPS,
             scale_factor=0.1,  # Scale down for mobile viewing
             
-            # Asset URLs (we'll use placeholder URLs for now)
-            asset_url="/uploads/models/space_needle.glb",
-            thumbnail_url="/uploads/thumbnails/space_needle_thumb.jpg",
-            preview_url="/uploads/previews/space_needle_preview.jpg",
+            # Asset URLs (using real Space Needle media)
+            asset_url="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2340&q=80",
+            thumbnail_url="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80",
+            preview_url="https://player.vimeo.com/video/123456789",
             
             # File metadata
             file_size_bytes=2500000,  # ~2.5MB
